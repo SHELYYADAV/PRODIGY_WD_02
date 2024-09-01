@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stopwatch Web Application</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #6d5bba, #8d58bf, #de67be, #f37694);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .stopwatch {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 36px;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .time {
+        font-size: 48px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .buttons button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+      }
+
+      .start {
+        background-color: #28a745;
+        color: white;
+      }
+
+      .stop {
+        background-color: #dc3545;
+        color: white;
+      }
+
+      .reset {
+        background-color: #ffc107;
+        color: white;
+      }
+
+      .buttons button:hover {
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stopwatch">
+      <h1>Stopwatch</h1>
+      <div class="time" id="display">00:00:00</div>
+      <div class="buttons">
+        <button class="start" id="startBtn">Start</button>
+        <button class="stop" id="stopBtn">Stop</button>
+        <button class="reset" id="resetBtn">Reset</button>
+      </div>
+    </div>
+
+    <script>
+      let startTime;
+      let updatedTime;
+      let difference;
+      let timerInterval;
+      let running = false;
+      let hours = 0,
+        minutes = 0,
+        seconds = 0;
+
+      const display = document.getElementById("display");
+      const startBtn = document.getElementById("startBtn");
+      const stopBtn = document.getElementById("stopBtn");
+      const resetBtn = document.getElementById("resetBtn");
+
+      function startTimer() {
+        if (!running) {
+          startTime = new Date().getTime();
+          timerInterval = setInterval(function () {
+            updatedTime = new Date().getTime();
+            difference = updatedTime - startTime;
+            hours = Math.floor(
+              (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            seconds = Math.floor((difference % (1000 * 60)) / 1000);
+            display.innerHTML =
+              (hours < 10 ? "0" : "") +
+              hours +
+              ":" +
+              (minutes < 10 ? "0" : "") +
+              minutes +
+              ":" +
+              (seconds < 10 ? "0" : "") +
+              seconds;
+          }, 1000);
+          running = true;
+        }
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+        running = false;
+      }
+
+      function resetTimer() {
+        clearInterval(timerInterval);
+        running = false;
+        display.innerHTML = "00:00:00";
+      }
+
+      startBtn.addEventListener("click", startTimer);
+      stopBtn.addEventListener("click", stopTimer);
+      resetBtn.addEventListener("click", resetTimer);
+    </script>
+  </body>
+</html>
